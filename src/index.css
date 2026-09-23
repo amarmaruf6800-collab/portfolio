@@ -2201,30 +2201,7 @@ button {
     min-height: 280px;
   }
 
-  /* Mobile: keep About static and reduce repeated paint work while scrolling. */
-  .about-mobile-static .about-skill-group,
-  .about-mobile-static .about-skill-list span {
-    transition: none;
-  }
-
-  .about-mobile-static .about-skill-group:hover {
-    transform: none;
-  }
-
-  .about-mobile-static .about-skill-group::after {
-    box-shadow: none;
-  }
-
-  .about-mobile-static .about-core {
-    box-shadow: 0 0 24px rgba(77, 225, 200, 0.08), inset 0 0 20px rgba(77, 225, 200, 0.035);
-  }
-
-  .about-mobile-static .about-visual,
-  .contact-mobile-static .contact-form,
-  .contact-mobile-static .contact-social-list {
-    contain: layout paint;
-  }
-
+  
   .about-orbit.orbit-one {
     width: 190px;
     height: 190px;
