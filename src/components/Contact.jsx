@@ -9,12 +9,7 @@ const socials = [
     { name: "INSTAGRAM", href: "https://www.instagram.com/amar_alg20/" },
 ];
 
-function Reveal({ as = "div", enabled, className, children }) {
-    if (!enabled) {
-        const Tag = as;
-        return <Tag className={className}>{children}</Tag>;
-    }
-
+function Reveal({ as = "div", className, children }) {
     const Component = motion[as] || motion.div;
     return (
         <Component
@@ -90,7 +85,7 @@ export default function Contact() {
                 <div className="contact-container">
 
                     {/* HEADER */}
-                    <Reveal as="header" enabled={!isMobile} className="contact-header">
+                    <Reveal as="header" className="contact-header">
                         <span className="contact-eyebrow">LET&apos;S TALK</span>
 
                         <h2>
@@ -104,7 +99,7 @@ export default function Contact() {
                     </Reveal>
 
                     {/* PROJECT INQUIRY */}
-                    <Reveal enabled={!isMobile} className="contact-form-layout">
+                    <Reveal className="contact-form-layout">
                         <div className="contact-form-intro">
                             <span className="contact-label">START A CONVERSATION</span>
                             <p>
@@ -163,7 +158,7 @@ export default function Contact() {
                     </Reveal>
 
                     {/* SOCIALS */}
-                    <Reveal enabled={!isMobile} className="contact-socials">
+                    <Reveal className="contact-socials">
                         <span className="contact-label">ELSEWHERE</span>
 
                         <div className="contact-social-list">
@@ -187,7 +182,7 @@ export default function Contact() {
                     </Reveal>
 
                     {/* FOOTER */}
-                    <Reveal as="footer" enabled={!isMobile} className="contact-footer">
+                    <Reveal as="footer" className="contact-footer">
                         <a href="#" className="contact-footer-brand">
                             AMAR<span>.</span>
                         </a>
