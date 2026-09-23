@@ -64,7 +64,7 @@ export default function About() {
 
     return (
         <MotionConfig reducedMotion={isMobile ? "always" : "never"}>
-            <section className={`about-section${isMobile ? " about-mobile-static" : ""}`} id="about">
+            <section className="about-section" id="about">
                 <div className="about-container">
 
                     {/* HEADER */}
