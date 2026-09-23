@@ -85,8 +85,8 @@ export default function Contact() {
     }
 
     return (
-        <MotionConfig reducedMotion={isMobile ? "always" : "never"}>
-            <section className={`contact-section${isMobile ? " contact-mobile-static" : ""}`} id="contact">
+       <MotionConfig reducedMotion="never">
+            <section className="contact-section" id="contact">
                 <div className="contact-container">
 
                     {/* HEADER */}
