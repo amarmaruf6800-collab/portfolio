@@ -324,8 +324,13 @@ export default function HeroVisual() {
         <div className="hero-3d hero-3d-reveal">
             <Canvas
                 camera={{ position: [0, 0, 8], fov: 42, near: 0.1, far: 20 }}
-                gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-                dpr={[1, 1.75]}
+                gl={{
+                    antialias: !isMobile,
+                    alpha: true,
+                    powerPreference: isMobile ? "low-power" : "high-performance",
+                }}
+                dpr={isMobile ? 1 : [1, 1.5]}
+                frameloop={isMobile ? "demand" : "always"}
                 onCreated={({ scene }) => {
                     // Point 3: Kabut tebal menciptakan efek fade to darkness di pinggiran
                     scene.fog = new THREE.FogExp2(new THREE.Color("#000806"), 0.08);
@@ -340,10 +345,12 @@ export default function HeroVisual() {
 
                 <BlueprintSystem isMobile={isMobile} />
 
-                <EffectComposer multisampling={4}>
-                    <Bloom intensity={1.0} luminanceThreshold={0.8} luminanceSmoothing={0.3} mipmapBlur />
-                    <Vignette eskil={false} offset={0.25} darkness={0.65} />
-                </EffectComposer>
+                {!isMobile && (
+                    <EffectComposer multisampling={2}>
+                        <Bloom intensity={1.0} luminanceThreshold={0.8} luminanceSmoothing={0.3} mipmapBlur />
+                        <Vignette eskil={false} offset={0.25} darkness={0.65} />
+                    </EffectComposer>
+                )}
             </Canvas>
         </div>
     );

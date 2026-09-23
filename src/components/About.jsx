@@ -1,176 +1,131 @@
 import { useEffect, useState } from "react";
 import { MotionConfig, motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { fadeUp, staggerContainer } from "../animations";
+import { fadeUp } from "../animations";
 
-// Data keahlian baru Anda
 const skillGroups = [
     {
-        category: 'Frontend',
-        description: 'Interfaces that feel clear, responsive, and alive.',
-        featured: ['React', 'JavaScript', 'Tailwind CSS'],
-        skills: ['HTML', 'CSS', 'Vite'],
+        category: "Frontend",
+        description: "Interfaces that feel clear, responsive, and alive.",
+        featured: ["React", "JavaScript", "Tailwind CSS"],
+        skills: ["HTML", "CSS", "Vite"],
     },
     {
-        category: 'Backend',
-        description: 'APIs and application logic built around real use cases.',
-        featured: ['Node.js', 'Laravel', 'Python'],
-        skills: ['Express', 'PHP', 'FastAPI'],
+        category: "Backend",
+        description: "APIs and application logic built around real use cases.",
+        featured: ["Node.js", "Laravel", "Python"],
+        skills: ["Express", "PHP", "FastAPI"],
     },
     {
-        category: 'Database',
-        description: 'Working with structured data and application persistence.',
-        featured: ['MySQL', 'MariaDB', 'TiDB'],
+        category: "Database",
+        description: "Working with structured data and application persistence.",
+        featured: ["MySQL", "MariaDB", "TiDB"],
         skills: [],
     },
     {
-        category: 'Tools & Cloud',
-        description: 'Development, deployment, and infrastructure tools.',
-        featured: ['Git', 'GitHub', 'AWS'],
-        skills: ['Linux', 'VPS', 'VS Code'],
+        category: "Tools & Cloud",
+        description: "Development, deployment, and infrastructure tools.",
+        featured: ["Git", "GitHub", "AWS"],
+        skills: ["Linux", "VPS", "VS Code"],
     },
 ];
+
+function Reveal({ as = "div", enabled, className, children }) {
+    if (!enabled) {
+        const Tag = as;
+        return <Tag className={className}>{children}</Tag>;
+    }
+
+    const Component = motion[as] || motion.div;
+    return (
+        <Component
+            className={className}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.18 }}
+            variants={fadeUp}
+        >
+            {children}
+        </Component>
+    );
+}
 
 export default function About() {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth <= 640);
-        checkMobile();
-        window.addEventListener("resize", checkMobile);
-        return () => window.removeEventListener("resize", checkMobile);
+        const mediaQuery = window.matchMedia("(max-width: 640px)");
+        const update = () => setIsMobile(mediaQuery.matches);
+
+        update();
+        mediaQuery.addEventListener("change", update);
+        return () => mediaQuery.removeEventListener("change", update);
     }, []);
 
     return (
-        <MotionConfig reducedMotion="never">
+        <MotionConfig reducedMotion={isMobile ? "always" : "never"}>
             <section className={`about-section${isMobile ? " about-mobile-static" : ""}`} id="about">
                 <div className="about-container">
 
                     {/* HEADER */}
-                    <motion.header
-                        className="about-header"
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.3 }}
-                        variants={staggerContainer}
-                    >
+                    <Reveal as="header" enabled={!isMobile} className="about-header">
                         <div>
-                            <motion.span className="about-eyebrow" variants={fadeUp}>
-                                ABOUT ME
-                            </motion.span>
-
-                            <motion.h2 variants={fadeUp}>
+                            <span className="about-eyebrow">ABOUT ME</span>
+                            <h2>
                                 Building with
                                 <span>intent.</span>
-                            </motion.h2>
+                            </h2>
                         </div>
 
-                        <motion.div className="about-header-meta" variants={fadeUp}>
+                        <div className="about-header-meta">
                             <span>BASED IN INDONESIA</span>
                             <span>FULL-STACK DEVELOPMENT</span>
-                        </motion.div>
-                    </motion.header>
+                        </div>
+                    </Reveal>
 
                     {/* INTRO */}
-                    <motion.div
-                        className="about-intro"
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.15 }}
-                        variants={staggerContainer}
-                    >
-                        <motion.div className="about-intro-index" variants={fadeUp}>
-                            01
-                        </motion.div>
+                    <Reveal enabled={!isMobile} className="about-intro">
+                        <div className="about-intro-index">01</div>
 
                         <div className="about-intro-content">
-                            <motion.span className="about-label" variants={fadeUp}>
-                                WHO I AM
-                            </motion.span>
+                            <span className="about-label">WHO I AM</span>
 
                             <div className="about-intro-grid">
-                                <motion.div className="about-copy" variants={staggerContainer}>
-                                    <motion.p className="about-lead" variants={fadeUp}>
+                                <div className="about-copy">
+                                    <p className="about-lead">
                                         I&apos;m Amar, a junior full-stack developer
                                         focused on turning ideas into useful digital
                                         products.
-                                    </motion.p>
+                                    </p>
 
-                                    <motion.p variants={fadeUp}>
+                                    <p>
                                         I enjoy working across the interface and the
                                         system behind it — from building responsive
                                         frontend experiences to developing the backend,
                                         database, and deployment that make them work.
-                                    </motion.p>
+                                    </p>
 
-                                    <motion.p variants={fadeUp}>
+                                    <p>
                                         Most of what I learn comes from building real
                                         projects, solving problems, and continuously
                                         improving what I&apos;ve already made.
-                                    </motion.p>
-                                </motion.div>
+                                    </p>
+                                </div>
 
-                                {/* TECHNICAL VISUAL (ANIMATED & LIGHTWEIGHT) */}
-                                <motion.div className="about-visual" variants={fadeUp}>
+                                <div className="about-visual">
+                                    <div className="about-visual-grid" />
 
-                                    {/* Background Grid yang berjalan pelan */}
-                                    <motion.div
-                                        className="about-visual-grid"
-                                        animate={isMobile ? undefined : { backgroundPosition: ["0px 0px", "38px 38px"] }}
-                                        transition={isMobile ? undefined : { duration: 3, repeat: Infinity, ease: "linear" }}
-                                    />
+                                    <div className="about-orbit orbit-one" />
+                                    <div className="about-orbit orbit-two" />
 
-                                    {/* Orbit 1 Berputar Searah Jarum Jam */}
-                                    <motion.div
-                                        className="about-orbit orbit-one"
-                                        // Mempertahankan style CSS "transform: translate & rotateX" bawaan agar tidak tertimpa Framer Motion
-                                        style={{ x: "-50%", y: "-50%", rotateX: 62 }}
-                                        animate={isMobile ? undefined : { rotateZ: [0, 360] }}
-                                        transition={isMobile ? undefined : { duration: 25, repeat: Infinity, ease: "linear" }}
-                                    />
-
-                                    {/* Orbit 2 Berputar Berlawanan Arah Jarum Jam */}
-                                    <motion.div
-                                        className="about-orbit orbit-two"
-                                        style={{ x: "-50%", y: "-50%", rotateX: 62 }}
-                                        animate={isMobile ? undefined : { rotateZ: [360, 0] }}
-                                        transition={isMobile ? undefined : { duration: 35, repeat: Infinity, ease: "linear" }}
-                                    />
-
-                                    {/* Kotak Inti Berdenyut (Breathing Effect) */}
-                                    <motion.div
-                                        className="about-core"
-                                        style={{ x: "-50%", y: "-50%" }}
-                                        animate={isMobile ? undefined : {
-                                            scale: [1, 1.05, 1],
-                                            boxShadow: [
-                                                "0 0 40px rgba(77, 225, 200, 0.08), inset 0 0 30px rgba(77, 225, 200, 0.035)",
-                                                "0 0 60px rgba(77, 225, 200, 0.2), inset 0 0 40px rgba(77, 225, 200, 0.08)",
-                                                "0 0 40px rgba(77, 225, 200, 0.08), inset 0 0 30px rgba(77, 225, 200, 0.035)"
-                                            ]
-                                        }}
-                                        transition={isMobile ? undefined : { duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                    >
+                                    <div className="about-core">
                                         <span>AMAR</span>
                                         <small>DEV / 01</small>
-                                    </motion.div>
+                                    </div>
 
-                                    {/* Titik Satelit Berkedip Berurutan */}
-                                    <motion.div
-                                        className="about-point point-one"
-                                        animate={isMobile ? undefined : { opacity: [0.3, 1, 0.3], scale: [1, 1.5, 1] }}
-                                        transition={isMobile ? undefined : { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0 }}
-                                    />
-                                    <motion.div
-                                        className="about-point point-two"
-                                        animate={isMobile ? undefined : { opacity: [0.3, 1, 0.3], scale: [1, 1.5, 1] }}
-                                        transition={isMobile ? undefined : { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                    />
-                                    <motion.div
-                                        className="about-point point-three"
-                                        animate={isMobile ? undefined : { opacity: [0.3, 1, 0.3], scale: [1, 1.5, 1] }}
-                                        transition={isMobile ? undefined : { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                                    />
+                                    <div className="about-point point-one" />
+                                    <div className="about-point point-two" />
+                                    <div className="about-point point-three" />
 
                                     <div className="about-coordinate coordinate-top">
                                         07°08&apos;S
@@ -179,43 +134,27 @@ export default function About() {
                                         110°24&apos;E
                                     </div>
 
-                                    {/* Label Berkedip Indikator */}
-                                    <motion.span
-                                        className="about-visual-label"
-                                        animate={isMobile ? undefined : { opacity: [0.4, 1, 0.4] }}
-                                        transition={isMobile ? undefined : { duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                                    >
+                                    <span className="about-visual-label">
                                         SYSTEM / ONLINE
-                                    </motion.span>
-                                </motion.div>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </motion.div>
+                    </Reveal>
 
                     {/* SKILLS */}
-                    <motion.div
-                        className="about-skills"
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.15 }}
-                        variants={staggerContainer}
-                    >
-                        <motion.div className="about-skills-index" variants={fadeUp}>
-                            02
-                        </motion.div>
+                    <Reveal enabled={!isMobile} className="about-skills">
+                        <div className="about-skills-index">02</div>
 
                         <div className="about-skills-content">
-                            <motion.span className="about-label" variants={fadeUp}>
-                                WHAT I WORK WITH
-                            </motion.span>
+                            <span className="about-label">WHAT I WORK WITH</span>
 
-                            <motion.div className="about-skills-grid" variants={staggerContainer}>
-
+                            <div className="about-skills-grid">
                                 {skillGroups.map((group, index) => {
                                     const allSkills = [...group.featured, ...group.skills];
 
                                     return (
-                                        <motion.div key={group.category} className="about-skill-group" variants={fadeUp}>
+                                        <div key={group.category} className="about-skill-group">
                                             <span className="about-skill-number">
                                                 0{index + 1}
                                             </span>
@@ -228,39 +167,28 @@ export default function About() {
                                                     <span key={skill}>{skill}</span>
                                                 ))}
                                             </div>
-                                        </motion.div>
+                                        </div>
                                     );
                                 })}
-
-                            </motion.div>
+                            </div>
                         </div>
-                    </motion.div>
+                    </Reveal>
 
                     {/* CURRENTLY */}
-                    <motion.div
-                        className="about-current"
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.2 }}
-                        variants={staggerContainer}
-                    >
-                        <motion.div className="about-current-index" variants={fadeUp}>
-                            03
-                        </motion.div>
+                    <Reveal enabled={!isMobile} className="about-current">
+                        <div className="about-current-index">03</div>
 
                         <div className="about-current-content">
-                            <motion.span className="about-label" variants={fadeUp}>
-                                CURRENTLY
-                            </motion.span>
+                            <span className="about-label">CURRENTLY</span>
 
                             <div className="about-current-main">
-                                <motion.h3 variants={staggerContainer}>
-                                    <motion.span variants={fadeUp}>Learning.</motion.span>
-                                    <motion.span variants={fadeUp}>Building.</motion.span>
-                                    <motion.span variants={fadeUp}>Improving.</motion.span>
-                                </motion.h3>
+                                <h3>
+                                    <span>Learning.</span>
+                                    <span>Building.</span>
+                                    <span>Improving.</span>
+                                </h3>
 
-                                <motion.div className="about-current-info" variants={fadeUp}>
+                                <div className="about-current-info">
                                     <p>
                                         I&apos;m currently focused on becoming a better
                                         developer by building projects, exploring new
@@ -272,10 +200,10 @@ export default function About() {
                                         <span>LET&apos;S WORK TOGETHER</span>
                                         <ArrowUpRight size={15} strokeWidth={1.7} />
                                     </a>
-                                </motion.div>
+                                </div>
                             </div>
                         </div>
-                    </motion.div>
+                    </Reveal>
 
                 </div>
             </section>

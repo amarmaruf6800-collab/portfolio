@@ -2395,3 +2395,48 @@ button {
   }
 
 }
+/* ========================================================================
+   MOBILE PERFORMANCE PASS
+   Keep the visual language intact while preventing continuous paint work
+   on smaller devices. The React components also skip Framer Motion on
+   mobile; these rules handle the remaining paint-heavy visual effects.
+======================================================================== */
+@media (max-width: 640px) {
+  .about-visual,
+  .contact-form {
+    contain: layout paint;
+  }
+
+  .about-visual-grid {
+    opacity: 0.2;
+  }
+
+  .about-core {
+    box-shadow: 0 0 18px rgba(77, 225, 200, 0.06), inset 0 0 14px rgba(77, 225, 200, 0.025);
+  }
+
+  .contact-submit:hover,
+  .about-contact-link:hover,
+  .about-skill-group:hover,
+  .about-skill-group:hover .about-skill-list span,
+  .contact-social:hover,
+  .contact-social:hover .contact-social-arrow {
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  /* The 3D hero is static on phones, so avoid keeping a compositor layer alive. */
+  .hero-3d-reveal {
+    will-change: auto;
+  }
+
+  /* Avoid a large GPU blur layer on mobile. */
+  .hero-background::after {
+    width: 380px;
+    height: 380px;
+    right: -170px;
+    filter: none;
+    opacity: 0.55;
+  }
+}

@@ -1,13 +1,33 @@
 import { useEffect, useState } from "react";
 import { MotionConfig, motion } from "framer-motion";
 import { ArrowUpRight, Send } from "lucide-react";
-import { fadeUp, staggerContainer } from "../animations";
+import { fadeUp } from "../animations";
 
 const socials = [
     { name: "GITHUB", href: "https://github.com/amarmaruf6800-collab" },
     { name: "LINKEDIN", href: "https://www.linkedin.com/in/amar-maruf-694634188" },
     { name: "INSTAGRAM", href: "https://www.instagram.com/amar_alg20/" },
 ];
+
+function Reveal({ as = "div", enabled, className, children }) {
+    if (!enabled) {
+        const Tag = as;
+        return <Tag className={className}>{children}</Tag>;
+    }
+
+    const Component = motion[as] || motion.div;
+    return (
+        <Component
+            className={className}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.18 }}
+            variants={fadeUp}
+        >
+            {children}
+        </Component>
+    );
+}
 
 export default function Contact() {
     const [message, setMessage] = useState("");
@@ -16,10 +36,12 @@ export default function Contact() {
     const [isSending, setIsSending] = useState(false);
 
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth <= 640);
-        checkMobile();
-        window.addEventListener("resize", checkMobile);
-        return () => window.removeEventListener("resize", checkMobile);
+        const mediaQuery = window.matchMedia("(max-width: 640px)");
+        const update = () => setIsMobile(mediaQuery.matches);
+
+        update();
+        mediaQuery.addEventListener("change", update);
+        return () => mediaQuery.removeEventListener("change", update);
     }, []);
 
     async function handleSubmit(event) {
@@ -68,36 +90,22 @@ export default function Contact() {
                 <div className="contact-container">
 
                     {/* HEADER */}
-                    <motion.header
-                        className="contact-header"
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.3 }}
-                        variants={staggerContainer}
-                    >
-                        <motion.span className="contact-eyebrow" variants={fadeUp}>
-                            LET&apos;S TALK
-                        </motion.span>
+                    <Reveal as="header" enabled={!isMobile} className="contact-header">
+                        <span className="contact-eyebrow">LET&apos;S TALK</span>
 
-                        <motion.h2 variants={fadeUp}>
+                        <h2>
                             Have a project
                             <span>in mind?</span>
-                        </motion.h2>
+                        </h2>
 
-                        <motion.span className="contact-header-note" variants={fadeUp}>
+                        <span className="contact-header-note">
                             01 / PROJECT INQUIRY
-                        </motion.span>
-                    </motion.header>
+                        </span>
+                    </Reveal>
 
                     {/* PROJECT INQUIRY */}
-                    <motion.div
-                        className="contact-form-layout"
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.15 }}
-                        variants={staggerContainer}
-                    >
-                        <motion.div className="contact-form-intro" variants={fadeUp}>
+                    <Reveal enabled={!isMobile} className="contact-form-layout">
+                        <div className="contact-form-intro">
                             <span className="contact-label">START A CONVERSATION</span>
                             <p>
                                 Tell me what you&apos;re building. I&apos;ll get back
@@ -107,9 +115,9 @@ export default function Contact() {
                                 <i />
                                 {submitted ? "MESSAGE SENT" : isSending ? "SENDING MESSAGE" : "READY TO RECEIVE"}
                             </span>
-                        </motion.div>
+                        </div>
 
-                        <motion.form className="contact-form" onSubmit={handleSubmit} variants={fadeUp}>
+                        <form className="contact-form" onSubmit={handleSubmit}>
                             <div className="contact-form-row">
                                 <label>
                                     <span>YOUR NAME</span>
@@ -151,52 +159,35 @@ export default function Contact() {
                                 <span>{isSending ? "SENDING..." : "SEND INQUIRY"}</span>
                                 <Send size={16} strokeWidth={1.7} />
                             </button>
-                        </motion.form>
-                    </motion.div>
+                        </form>
+                    </Reveal>
 
                     {/* SOCIALS */}
-                    <motion.div
-                        className="contact-socials"
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.2 }}
-                        variants={staggerContainer}
-                    >
-                        <motion.span className="contact-label" variants={fadeUp}>
-                            ELSEWHERE
-                        </motion.span>
+                    <Reveal enabled={!isMobile} className="contact-socials">
+                        <span className="contact-label">ELSEWHERE</span>
 
-                        <motion.div className="contact-social-list" variants={staggerContainer}>
-                            {socials.map((social, index) => {
-                                return (
-                                    <motion.a
-                                        key={social.name}
-                                        href={social.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="contact-social"
-                                        aria-label={social.name}
-                                        variants={fadeUp}
-                                    >
-                                        <span className="contact-social-index">
-                                            0{index + 1}
-                                        </span>
-                                        <span>{social.name}</span>
-                                        <ArrowUpRight className="contact-social-arrow" size={13} strokeWidth={1.5} />
-                                    </motion.a>
-                                );
-                            })}
-                        </motion.div>
-                    </motion.div>
+                        <div className="contact-social-list">
+                            {socials.map((social, index) => (
+                                <a
+                                    key={social.name}
+                                    href={social.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="contact-social"
+                                    aria-label={social.name}
+                                >
+                                    <span className="contact-social-index">
+                                        0{index + 1}
+                                    </span>
+                                    <span>{social.name}</span>
+                                    <ArrowUpRight className="contact-social-arrow" size={13} strokeWidth={1.5} />
+                                </a>
+                            ))}
+                        </div>
+                    </Reveal>
 
                     {/* FOOTER */}
-                    <motion.footer
-                        className="contact-footer"
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.8 }}
-                        variants={fadeUp}
-                    >
+                    <Reveal as="footer" enabled={!isMobile} className="contact-footer">
                         <a href="#" className="contact-footer-brand">
                             AMAR<span>.</span>
                         </a>
@@ -210,7 +201,7 @@ export default function Contact() {
                             <a href="#about">ABOUT</a>
                             <a href="#contact">CONTACT</a>
                         </nav>
-                    </motion.footer>
+                    </Reveal>
 
                 </div>
             </section>
