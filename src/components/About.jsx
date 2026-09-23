@@ -30,12 +30,7 @@ const skillGroups = [
     },
 ];
 
-function Reveal({ as = "div", enabled, className, children }) {
-    if (!enabled) {
-        const Tag = as;
-        return <Tag className={className}>{children}</Tag>;
-    }
-
+function Reveal({ as = "div", className, children }) {
     const Component = motion[as] || motion.div;
     return (
         <Component
@@ -63,12 +58,12 @@ export default function About() {
     }, []);
 
     return (
-        <MotionConfig reducedMotion={isMobile ? "always" : "never"}>
+        <MotionConfig reducedMotion="never">
             <section className="about-section" id="about">
                 <div className="about-container">
 
                     {/* HEADER */}
-                    <Reveal as="header" enabled={!isMobile} className="about-header">
+                    <Reveal as="header" className="about-header">
                         <div>
                             <span className="about-eyebrow">ABOUT ME</span>
                             <h2>
@@ -84,7 +79,7 @@ export default function About() {
                     </Reveal>
 
                     {/* INTRO */}
-                    <Reveal enabled={!isMobile} className="about-intro">
+                    <Reveal className="about-intro">
                         <div className="about-intro-index">01</div>
 
                         <div className="about-intro-content">
@@ -143,7 +138,7 @@ export default function About() {
                     </Reveal>
 
                     {/* SKILLS */}
-                    <Reveal enabled={!isMobile} className="about-skills">
+                    <Reveal className="about-skills">
                         <div className="about-skills-index">02</div>
 
                         <div className="about-skills-content">
@@ -175,7 +170,7 @@ export default function About() {
                     </Reveal>
 
                     {/* CURRENTLY */}
-                    <Reveal enabled={!isMobile} className="about-current">
+                    <Reveal className="about-current">
                         <div className="about-current-index">03</div>
 
                         <div className="about-current-content">
