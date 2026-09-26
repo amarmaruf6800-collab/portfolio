@@ -1,5 +1,5 @@
 import algWmsImage from "./assets/alg-wms.png";
-import algShopImage from "./assets/algshop.png";
+import algShopImage from "./assets/algshopp.png";
 import algMusicImage from "./assets/algmusic.png";
 import algMoviesImage from "./assets/algmovies.png";
 import weddingImage from "./assets/wedding.png";
